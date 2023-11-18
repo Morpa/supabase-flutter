@@ -1,0 +1,27 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  plugins:
+    - custom_lint
+  errors:
+    invalid_annotation_target: ignore
+    todo: ignore
+    non_constant_identifier_names: ignore
+    library_private_types_in_public_api: ignore
+  exclude:
+    - '**/*.g.dart'
+    - '**/*.freezed.dart'
+
+linter:
+  rules:
+    avoid_web_libraries_in_flutter: true
+    prefer_relative_imports: true
+    prefer_single_quotes: true
+    unnecessary_await_in_return: true
+    prefer_final_locals: true
+    prefer_final_fields: false
+    avoid_unused_constructor_parameters: true
+    always_declare_return_types: true
+    require_trailing_commas: true
+    sort_unnamed_constructors_first: true
+    no_leading_underscores_for_local_identifiers: false
