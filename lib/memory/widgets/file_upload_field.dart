@@ -46,7 +46,7 @@ class FileUploadField extends FormField<File?> {
                                 'jpg',
                                 'jpeg',
                                 'png',
-                                'bmp',
+                                'bmp'
                               ],
                             );
                           }
@@ -57,8 +57,7 @@ class FileUploadField extends FormField<File?> {
 
                           state
                             ..didChange(
-                              filePath != null ? File(filePath) : null,
-                            )
+                                filePath != null ? File(filePath) : null)
                             ..save();
                         },
                   child: Padding(
@@ -83,7 +82,7 @@ class FileUploadField extends FormField<File?> {
                       color: Colors.redAccent,
                       fontSize: 12,
                     ),
-                  ),
+                  )
                 ],
               ],
             );

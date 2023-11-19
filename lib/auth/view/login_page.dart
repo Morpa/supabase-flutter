@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/core.dart';
 import '../../onboarding/onboarding.dart';
+import '../auth.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -21,18 +22,39 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final _passwordCtrl = TextEditingController();
   final _usernameCtrl = TextEditingController();
 
-  Future<void> _login() async {}
+  Future<void> _login() async {
+    try {
+      setState(() {
+        _isSubmitting = true;
+      });
+
+      await ref.read(authRepositoryProvider).logIn(
+            email: _emailCtrl.text,
+            password: _passwordCtrl.text,
+          );
+
+      if (mounted) {
+        context.pop();
+      }
+    } catch (e) {
+      setState(() {
+        _isSubmitting = false;
+      });
+
+      context.showAlert(e.toString());
+    }
+  }
 
   Future<void> _createAccount() async {
-    setState(() {
-      _isSubmitting = true;
-    });
-
     try {
+      setState(() {
+        _isSubmitting = true;
+      });
+
       await ref.read(onboardingRepositoryProvider).signUp(
             email: _emailCtrl.text,
             password: _passwordCtrl.text,
-            usename: _usernameCtrl.text,
+            username: _usernameCtrl.text,
           );
 
       if (mounted) {
@@ -46,10 +68,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         );
       }
     } catch (e) {
-      if (mounted) {
-        context.showAlert(e.toString());
-      }
+      context.showAlert(e.toString());
     }
+
     setState(() {
       _isSubmitting = false;
     });
@@ -106,7 +127,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               SizedBox(
                 width: double.infinity,
                 child: FilledButton(
-                  onPressed: _isSubmitting ? null : () {},
+                  onPressed: _isSubmitting
+                      ? null
+                      : () {
+                          if (_formKey.currentState!.validate()) {
+                            _login();
+                          } else {
+                            setState(() {
+                              _autovalidateMode = AutovalidateMode.always;
+                            });
+                          }
+                        },
                   child: const Text('Submit'),
                 ),
               ),

@@ -4,8 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 part 'onboarding_repository.g.dart';
 
 @riverpod
-OnboardingRepository onboardingRepository(OnboardingRepositoryRef ref) =>
-    OnboardingRepository();
+OnboardingRepository onboardingRepository(_) => OnboardingRepository();
 
 class OnboardingRepository {
   final _client = Supabase.instance.client;
@@ -13,12 +12,12 @@ class OnboardingRepository {
   Future<AuthResponse> signUp({
     required String email,
     required String password,
-    required String usename,
+    required String username,
   }) async {
     return _client.auth.signUp(
-      password: password,
       email: email,
-      data: {'username': usename},
+      password: password,
+      data: {'username': username},
     );
   }
 

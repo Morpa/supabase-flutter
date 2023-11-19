@@ -6,21 +6,21 @@ import '../../core/core.dart';
 import '../onboarding.dart';
 
 class VerificationPageParams {
-  final String email;
-  final String password;
-  final String username;
-
   const VerificationPageParams({
     required this.email,
     required this.password,
     required this.username,
   });
+
+  final String email;
+  final String password;
+  final String username;
 }
 
 class VerificationPage extends ConsumerStatefulWidget {
-  final VerificationPageParams params;
-
   const VerificationPage({required this.params, super.key});
+
+  final VerificationPageParams params;
 
   @override
   ConsumerState<VerificationPage> createState() => _VerificationPageState();
@@ -34,53 +34,52 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
   final _codeCtrl = TextEditingController();
 
   Future<void> _resendCode() async {
-    setState(() {
-      _isSubmitting = true;
-    });
-
     try {
+      setState(() {
+        _isSubmitting = true;
+      });
+
       await ref.read(onboardingRepositoryProvider).signUp(
             email: widget.params.email,
             password: widget.params.password,
-            usename: widget.params.username,
+            username: widget.params.username,
           );
 
       if (mounted) {
         context.showAlert('Code resent');
       }
     } catch (e) {
-      if (mounted) {
-        context.showAlert(e.toString());
-      }
+      context.showAlert(e.toString());
     }
+
     setState(() {
       _isSubmitting = false;
     });
   }
 
   Future<void> _verify() async {
-    setState(() {
-      _isSubmitting = true;
-    });
-
     try {
+      setState(() {
+        _isSubmitting = true;
+      });
+
       await ref.read(onboardingRepositoryProvider).verifyCode(
             email: widget.params.email,
             code: _codeCtrl.text,
           );
 
       if (mounted) {
-        context.showAlert('Account created successfully');
+        context.showAlert('Successfully signed up');
+
         context.go('/');
       }
     } catch (e) {
-      if (mounted) {
-        context.showAlert(e.toString());
-      }
+      setState(() {
+        _isSubmitting = false;
+      });
+
+      context.showAlert(e.toString());
     }
-    setState(() {
-      _isSubmitting = false;
-    });
   }
 
   @override
@@ -101,7 +100,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
             children: [
               Text(
                 'Enter the verification code sent '
-                'to your email address ${widget.params.email}}',
+                'to your email address ${widget.params.email}',
               ),
               const SizedBox(height: 30),
               TextFormField(
